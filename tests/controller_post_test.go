@@ -97,7 +97,7 @@ func TestCreatePost(t *testing.T) {
 	}
 	for _, v := range samples {
 
-		req, err := http.NewRequest("POST", "/posts", bytes.NewBufferString(v.inputJSON))
+		req, err := http.NewRequest("POST", "/v1/api/post", bytes.NewBufferString(v.inputJSON))
 		if err != nil {
 			t.Errorf("this is the error: %v\n", err)
 		}
@@ -135,7 +135,7 @@ func TestGetPosts(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	req, err := http.NewRequest("GET", "/posts", nil)
+	req, err := http.NewRequest("GET", "/v1/api/post", nil)
 	if err != nil {
 		t.Errorf("this is the error: %v\n", err)
 	}
@@ -181,7 +181,7 @@ func TestFindPostByID(t *testing.T) {
 	}
 	for _, v := range postSample {
 
-		req, err := http.NewRequest("GET", "/posts", nil)
+		req, err := http.NewRequest("GET", "/v1/api//post", nil)
 		if err != nil {
 			t.Errorf("this is the error: %v\n", err)
 		}
@@ -326,7 +326,7 @@ func TestUpdatePost(t *testing.T) {
 
 	for _, v := range samples {
 
-		req, err := http.NewRequest("POST", "/posts", bytes.NewBufferString(v.updateJSON))
+		req, err := http.NewRequest("POST", "/v1/api/post", bytes.NewBufferString(v.updateJSON))
 		if err != nil {
 			t.Errorf("this is the error: %v\n", err)
 		}
@@ -438,7 +438,7 @@ func TestDeletePost(t *testing.T) {
 
 	for _, v := range postSample {
 
-		req, _ := http.NewRequest("GET", "/posts", nil)
+		req, _ := http.NewRequest("GET", "/v1/api/post", nil)
 		req = mux.SetURLVars(req, map[string]string{"id": v.id})
 
 		rr := httptest.NewRecorder()
