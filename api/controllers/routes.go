@@ -1,17 +1,24 @@
 package controllers
 
-import "github.com/loeken/rest-blog/api/middlewares"
+import (
+	"github.com/loeken/rest-blog/api/middlewares"
+	_ "github.com/loeken/rest-blog/docs"
+
+	httpSwagger "github.com/swaggo/http-swagger"
+)
 
 func (s *Server) initializeRoutes() {
 
-	// Home Route
+
 	s.Router.HandleFunc("/", middlewares.SetMiddlewareJSON(s.Home)).Methods("GET")
 
 	// Login Route
-	s.Router.HandleFunc("/api/v1/login", middlewares.SetMiddlewareJSON(s.Login)).Methods("POST")
+	s.Router.HandleFunc("/api/v1/user/login", middlewares.SetMiddlewareJSON(s.Login)).Methods("POST")
+
+
 
 	//Users routes
-	s.Router.HandleFunc("/api/v1/user", middlewares.SetMiddlewareJSON(s.CreateUser)).Methods("POST")
+	s.Router.HandleFunc("/api/v1/user", middlewares.SetMiddlewareJSON(s.CreateUser)).Methods("POST","OPTIONS")
 	s.Router.HandleFunc("/api/v1/user", middlewares.SetMiddlewareJSON(s.GetUsers)).Methods("GET")
 	s.Router.HandleFunc("/api/v1/user/{id}", middlewares.SetMiddlewareJSON(s.GetUser)).Methods("GET")
 	s.Router.HandleFunc("/api/v1/user/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateUser))).Methods("PUT")
@@ -23,4 +30,6 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/api/v1/post/{id}", middlewares.SetMiddlewareJSON(s.GetPost)).Methods("GET")
 	s.Router.HandleFunc("/api/v1/post/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdatePost))).Methods("PUT")
 	s.Router.HandleFunc("/api/v1/post/{id}", middlewares.SetMiddlewareAuthentication(s.DeletePost)).Methods("DELETE")
+
+	s.Router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 }

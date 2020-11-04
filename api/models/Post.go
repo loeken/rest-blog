@@ -9,6 +9,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// Post represents an entry in the posts table
 type Post struct {
 	ID        uint64    `gorm:"primary_key;auto_increment" json:"id"`
 	Title     string    `gorm:"size:255;not null;unique" json:"title"`

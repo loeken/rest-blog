@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-
 	"github.com/loeken/rest-blog/api/auth"
 	"github.com/loeken/rest-blog/api/models"
 	"github.com/loeken/rest-blog/api/responses"
@@ -12,6 +11,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Login godoc
+// @Summary Login to the application, generates a JWT
+// @Description Allows login to the application by generating a JWT
+// @Accept json
+// @Param body body models.User true "Login"
+// @Success 200 {string} string	"Token"
+// @Router /user/login [post]
 func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -37,7 +43,7 @@ func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, formattedError)
 		return
 	}
-	responses.JSON(w, http.StatusOK, token)
+	responses.JSON(w, http.StatusOK, "Bearer " + token)
 }
 
 func (server *Server) SignIn(email, password string) (string, error) {

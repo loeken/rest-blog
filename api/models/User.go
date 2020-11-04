@@ -12,13 +12,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+
+// User represents the individual using this application
+// swagger:model
 type User struct {
-	ID        uint32    `gorm:"primary_key;auto_increment" json:"id"`
+	// hidden: true
+	ID        uint32    `gorm:"primary_key;auto_increment" swaggerignore:"true" `
 	Nickname  string    `gorm:"size:255;not null;unique" json:"nickname"`
 	Email     string    `gorm:"size:100;not null;unique" json:"email"`
-	Password  string    `gorm:"size:100;not null;" json:"password"`
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	Password  string    `gorm:"size:100;not null; json:"password,omitempty"`
+	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at" swaggerignore:"true"`
+	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at" swaggerignore:"true"`
 }
 
 func Hash(password string) ([]byte, error) {

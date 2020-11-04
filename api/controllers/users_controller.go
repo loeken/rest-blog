@@ -7,14 +7,19 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
-
 	"github.com/gorilla/mux"
 	"github.com/loeken/rest-blog/api/auth"
 	"github.com/loeken/rest-blog/api/models"
 	"github.com/loeken/rest-blog/api/responses"
 	"github.com/loeken/rest-blog/api/utils/formaterror"
 )
-
+// CreateUser godoc
+// @Summary Creates a new User account
+// @Description Creates a new User account
+// @Accept json
+// @Param body body models.User true "Json body containing user credentials"
+// @Success 200 {array} models.User
+// @Router /user [post]
 func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -45,7 +50,13 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, userCreated.ID))
 	responses.JSON(w, http.StatusCreated, userCreated)
 }
-
+// GetUsers godoc
+// @Summary lists all users
+// @Description lists all users
+// @Accept  json
+// @Success 200 {array} models.User
+// @Produces string
+// @Router /user [get]
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 	user := models.User{}
@@ -55,9 +66,16 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+
 	responses.JSON(w, http.StatusOK, users)
 }
-
+// GetUser godoc
+// @Summary list specific user by id
+// @Description list specific user by id
+// @Accept  json
+// @Success 200 {array} models.User
+// @Router /user/{id} [get]
+// @Param id path int true "User ID"
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -72,9 +90,19 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
+	userGotten.Password = ""
 	responses.JSON(w, http.StatusOK, userGotten)
 }
-
+// GetUser godoc
+// @Summary update specific user by id
+// @Description update specific user by id
+// @Accept  json
+// @Success 200 {object} models.User
+// @Router /user/{id} [put]
+// @Param id path int true "User ID"
+// @Param body body models.User true "Json body containing user credentials"
+// @Security ApiKeyAuth
+// @param Authorization header string true "Format: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'"
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -117,7 +145,15 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	responses.JSON(w, http.StatusOK, updatedUser)
 }
-
+// DeleteUser godoc
+// @Summary delete specific user by id
+// @Description delete specific user by id
+// @Accept  json
+// @Success 204 {object} models.User
+// @Router /user/{id} [delete]
+// @Param id path int true "User ID"
+// @Security ApiKeyAuth
+// @param Authorization header string true "Format: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'"
 func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)

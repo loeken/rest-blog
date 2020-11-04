@@ -1,0 +1,34 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "description": "Get details of all orders",
+                "summary": "just the landing page",
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
+        "/api/v1/user": {
+            "post": {
+                "description": "Allows login to the application by generating a JWT",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain; charset=utf-8"
+                ],
+                "summary": "Login to the application, generates a JWT",
+                "responses": {
+                    "200": {
+                        "description": "Bearer Token"
+                    }
+                }
+            }
+        }
+    }
+}
