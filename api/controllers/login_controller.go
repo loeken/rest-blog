@@ -15,8 +15,9 @@ import (
 // @Summary Login to the application, generates a JWT
 // @Description Allows login to the application by generating a JWT
 // @Accept json
-// @Param body body models.User true "Login"
+// @Param body body models.UserRegister true "Login"
 // @Success 200 {string} string	"Token"
+// @tags auth
 // @Router /auth [post]
 func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)

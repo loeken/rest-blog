@@ -30,7 +30,7 @@ docker-compose -f docker-compose.test.yml up
 
 ## Documentation
 
-you want to know what endpoints are available and what params they need, checkout http://localhost:8080/swagger/index.html
+you want to know what endpoints are available and what params they need, checkout http://localhost:8080/docs/index.html
 you can update the swagger documentation my issuing a simple "swag init" inside the folder where the main.go is
 
 

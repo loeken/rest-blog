@@ -15,6 +15,13 @@ definitions:
         type: string
       nickname:
         type: string
+    type: object
+  models.UserRegister:
+    properties:
+      email:
+        type: string
+      nickname:
+        type: string
       password:
         type: string
     type: object
@@ -39,13 +46,15 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/models.UserRegister'
       responses:
         "200":
           description: Token
           schema:
             type: string
       summary: Login to the application, generates a JWT
+      tags:
+      - auth
   /post:
     get:
       consumes:
@@ -59,6 +68,8 @@ paths:
               $ref: '#/definitions/models.Post'
             type: array
       summary: lists all posts
+      tags:
+      - posts
     post:
       consumes:
       - application/json
@@ -85,6 +96,83 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Creates a new post
+      tags:
+      - posts
+  /post/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a post
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 'Format: ''Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Entity Count
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes a post
+      tags:
+      - posts
+    get:
+      consumes:
+      - application/json
+      description: list post by id
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Post'
+      summary: list post by id
+      tags:
+      - posts
+    put:
+      consumes:
+      - application/json
+      description: Updates a post
+      parameters:
+      - description: Json body containing post data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Post'
+      - description: 'Format: ''Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Post'
+      security:
+      - ApiKeyAuth: []
+      summary: Updates a post
+      tags:
+      - posts
   /user:
     get:
       consumes:
@@ -98,6 +186,8 @@ paths:
               $ref: '#/definitions/models.User'
             type: array
       summary: lists all users
+      tags:
+      - users
     post:
       consumes:
       - application/json
@@ -117,6 +207,8 @@ paths:
               $ref: '#/definitions/models.User'
             type: array
       summary: Creates a new User account
+      tags:
+      - users
   /user/{id}:
     delete:
       consumes:
@@ -141,6 +233,8 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: delete specific user by id
+      tags:
+      - users
     get:
       consumes:
       - application/json
@@ -159,6 +253,8 @@ paths:
               $ref: '#/definitions/models.User'
             type: array
       summary: list specific user by id
+      tags:
+      - users
     put:
       consumes:
       - application/json
@@ -188,6 +284,8 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: update specific user by id
+      tags:
+      - users
 schemes:
 - http
 securityDefinitions:

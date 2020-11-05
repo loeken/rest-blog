@@ -34,6 +34,9 @@ var doc = `{
                 "consumes": [
                     "application/json"
                 ],
+                "tags": [
+                    "auth"
+                ],
                 "summary": "Login to the application, generates a JWT",
                 "parameters": [
                     {
@@ -42,7 +45,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.UserRegister"
                         }
                     }
                 ],
@@ -61,6 +64,9 @@ var doc = `{
                 "description": "lists all posts",
                 "consumes": [
                     "application/json"
+                ],
+                "tags": [
+                    "posts"
                 ],
                 "summary": "lists all posts",
                 "responses": {
@@ -84,6 +90,9 @@ var doc = `{
                 "description": "Creates a new post",
                 "consumes": [
                     "application/json"
+                ],
+                "tags": [
+                    "posts"
                 ],
                 "summary": "Creates a new post",
                 "parameters": [
@@ -117,11 +126,130 @@ var doc = `{
                 }
             }
         },
+        "/post/{id}": {
+            "get": {
+                "description": "list post by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "posts"
+                ],
+                "summary": "list post by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Post"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Updates a post",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "posts"
+                ],
+                "summary": "Updates a post",
+                "parameters": [
+                    {
+                        "description": "Json body containing post data",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Post"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Format: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Post"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Deletes a post",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "posts"
+                ],
+                "summary": "Deletes a post",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Format: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Entity Count",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "description": "lists all users",
                 "consumes": [
                     "application/json"
+                ],
+                "tags": [
+                    "users"
                 ],
                 "summary": "lists all users",
                 "responses": {
@@ -140,6 +268,9 @@ var doc = `{
                 "description": "Creates a new User account",
                 "consumes": [
                     "application/json"
+                ],
+                "tags": [
+                    "users"
                 ],
                 "summary": "Creates a new User account",
                 "parameters": [
@@ -172,6 +303,9 @@ var doc = `{
                 "consumes": [
                     "application/json"
                 ],
+                "tags": [
+                    "users"
+                ],
                 "summary": "list specific user by id",
                 "parameters": [
                     {
@@ -203,6 +337,9 @@ var doc = `{
                 "description": "update specific user by id",
                 "consumes": [
                     "application/json"
+                ],
+                "tags": [
+                    "users"
                 ],
                 "summary": "update specific user by id",
                 "parameters": [
@@ -249,6 +386,9 @@ var doc = `{
                 "consumes": [
                     "application/json"
                 ],
+                "tags": [
+                    "users"
+                ],
                 "summary": "delete specific user by id",
                 "parameters": [
                     {
@@ -293,6 +433,17 @@ var doc = `{
             }
         },
         "models.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserRegister": {
             "type": "object",
             "properties": {
                 "email": {

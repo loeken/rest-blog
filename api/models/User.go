@@ -15,13 +15,18 @@ import (
 // User represents the individual using this application
 // swagger:model
 type User struct {
-	// hidden: true
 	ID        uint32    `gorm:"primary_key;auto_increment" swaggerignore:"true"`
 	Nickname  string    `gorm:"size:255;not null;unique" json:"nickname"`
 	Email     string    `gorm:"size:100;not null;unique" json:"email"`
 	Password  string    `gorm:"size:100;not null" json:"-"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at" swaggerignore:"true"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at" swaggerignore:"true"`
+}
+type UserRegister struct {
+	Nickname  string    `gorm:"size:255;not null;unique" json:"nickname"`
+	Email     string    `gorm:"size:100;not null;unique" json:"email"`
+	Password  string    `gorm:"size:100;not null" json:"password"`
+
 }
 func (u *User) CleanForPublic() {
 	u.Password = ""

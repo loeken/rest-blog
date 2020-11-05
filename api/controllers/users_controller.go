@@ -20,6 +20,7 @@ import (
 // @Param body body models.User true "Json body containing user credentials"
 // @Success 200 {array} models.User
 // @Router /user [post]
+// @tags users
 func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -57,6 +58,7 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} models.User
 // @Produces string
 // @Router /user [get]
+// @tags users
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 	user := models.User{}
@@ -76,6 +78,7 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} models.User
 // @Router /user/{id} [get]
 // @Param id path int true "User ID"
+// @tags users
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -103,6 +106,7 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 // @Param body body models.User true "Json body containing user credentials"
 // @Security ApiKeyAuth
 // @param Authorization header string true "Format: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'"
+// @tags users
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -154,6 +158,7 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 // @Param id path int true "User ID"
 // @Security ApiKeyAuth
 // @param Authorization header string true "Format: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'"
+// @tags users
 func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)

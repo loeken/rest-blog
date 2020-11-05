@@ -31,5 +31,5 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/api/v1/post/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdatePost))).Methods("PUT")
 	s.Router.HandleFunc("/api/v1/post/{id}", middlewares.SetMiddlewareAuthentication(s.DeletePost)).Methods("DELETE")
 
-	s.Router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
+	s.Router.PathPrefix("/docs").Handler(httpSwagger.WrapHandler)
 }
