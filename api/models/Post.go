@@ -11,13 +11,13 @@ import (
 
 // Post represents an entry in the posts table
 type Post struct {
-	ID        uint64    `gorm:"primary_key;auto_increment" json:"id"`
+	ID        uint64    `gorm:"primary_key;auto_increment" json:"id" swaggerignore:"true"`
 	Title     string    `gorm:"size:255;not null;unique" json:"title"`
 	Content   string    `gorm:"size:255;not null;" json:"content"`
-	Author    User      `json:"author"`
+	Author    User      `json:"author" swaggerignore:"true"`
 	AuthorID  uint32    `gorm:"not null" json:"author_id"`
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at" swaggerignore:"true"`
+	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at" swaggerignore:"true"`
 }
 
 func (p *Post) Prepare() {

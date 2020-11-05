@@ -6,7 +6,6 @@ import (
 	"log"
 	"strings"
 	"time"
-
 	"github.com/badoux/checkmail"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
@@ -17,14 +16,16 @@ import (
 // swagger:model
 type User struct {
 	// hidden: true
-	ID        uint32    `gorm:"primary_key;auto_increment" swaggerignore:"true" `
+	ID        uint32    `gorm:"primary_key;auto_increment" swaggerignore:"true"`
 	Nickname  string    `gorm:"size:255;not null;unique" json:"nickname"`
 	Email     string    `gorm:"size:100;not null;unique" json:"email"`
-	Password  string    `gorm:"size:100;not null; json:"password,omitempty"`
+	Password  string    `gorm:"size:100;not null" json:"-"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at" swaggerignore:"true"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at" swaggerignore:"true"`
 }
-
+func (u *User) CleanForPublic() {
+	u.Password = ""
+  }
 func Hash(password string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 }

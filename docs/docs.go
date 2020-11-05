@@ -23,14 +23,100 @@ var doc = `{
             "name": "loeken",
             "email": "loeken@internetz.me"
         },
-        "license": {
-            "name": "Apache 2.0"
-        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth": {
+            "post": {
+                "description": "Allows login to the application by generating a JWT",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Login to the application, generates a JWT",
+                "parameters": [
+                    {
+                        "description": "Login",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/post": {
+            "get": {
+                "description": "lists all posts",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "lists all posts",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Post"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates a new post",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Creates a new post",
+                "parameters": [
+                    {
+                        "description": "Json body containing post data",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Post"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Format: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Post"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "description": "lists all users",
@@ -75,34 +161,6 @@ var doc = `{
                             "items": {
                                 "$ref": "#/definitions/models.User"
                             }
-                        }
-                    }
-                }
-            }
-        },
-        "/user/login": {
-            "post": {
-                "description": "Allows login to the application by generating a JWT",
-                "consumes": [
-                    "application/json"
-                ],
-                "summary": "Login to the application, generates a JWT",
-                "parameters": [
-                    {
-                        "description": "Login",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Token",
-                        "schema": {
-                            "type": "string"
                         }
                     }
                 }
@@ -209,8 +267,8 @@ var doc = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "204": {
+                        "description": "No Content",
                         "schema": {
                             "$ref": "#/definitions/models.User"
                         }
@@ -220,6 +278,20 @@ var doc = `{
         }
     },
     "definitions": {
+        "models.Post": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "models.User": {
             "type": "object",
             "properties": {

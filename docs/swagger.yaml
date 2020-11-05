@@ -1,5 +1,14 @@
 basePath: /api/v1
 definitions:
+  models.Post:
+    properties:
+      author_id:
+        type: integer
+      content:
+        type: string
+      title:
+        type: string
+    type: object
   models.User:
     properties:
       email:
@@ -15,12 +24,67 @@ info:
     email: loeken@internetz.me
     name: loeken
   description: This is a sample service for a blog
-  license:
-    name: Apache 2.0
   termsOfService: loekenIsKing
   title: Rest Blog
   version: "1.0"
 paths:
+  /auth:
+    post:
+      consumes:
+      - application/json
+      description: Allows login to the application by generating a JWT
+      parameters:
+      - description: Login
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      responses:
+        "200":
+          description: Token
+          schema:
+            type: string
+      summary: Login to the application, generates a JWT
+  /post:
+    get:
+      consumes:
+      - application/json
+      description: lists all posts
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Post'
+            type: array
+      summary: lists all posts
+    post:
+      consumes:
+      - application/json
+      description: Creates a new post
+      parameters:
+      - description: Json body containing post data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Post'
+      - description: 'Format: ''Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Post'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Creates a new post
   /user:
     get:
       consumes:
@@ -70,8 +134,8 @@ paths:
         required: true
         type: string
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
           schema:
             $ref: '#/definitions/models.User'
       security:
@@ -124,24 +188,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: update specific user by id
-  /user/login:
-    post:
-      consumes:
-      - application/json
-      description: Allows login to the application by generating a JWT
-      parameters:
-      - description: Login
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/models.User'
-      responses:
-        "200":
-          description: Token
-          schema:
-            type: string
-      summary: Login to the application, generates a JWT
 schemes:
 - http
 securityDefinitions:

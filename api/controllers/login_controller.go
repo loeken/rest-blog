@@ -17,7 +17,7 @@ import (
 // @Accept json
 // @Param body body models.User true "Login"
 // @Success 200 {string} string	"Token"
-// @Router /user/login [post]
+// @Router /auth [post]
 func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {

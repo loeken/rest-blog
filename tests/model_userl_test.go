@@ -102,7 +102,7 @@ func TestUpdateAUser(t *testing.T) {
 	assert.Equal(t, updatedUser.Nickname, userUpdate.Nickname)
 }
 
-/*
+
 func TestDeleteAUser(t *testing.T) {
 
 	err := refreshUserTable()
@@ -127,4 +127,3 @@ func TestDeleteAUser(t *testing.T) {
 	//Can be done this way too
 	// assert.Equal(t, isDeleted, int64(1))
 }
-*/

@@ -74,17 +74,17 @@ func TestLogin(t *testing.T) {
 		errorMessage string
 	}{
 		{
-			inputJSON:    `{"email": "pet@gmail.com", "password": "password"}`,
+			inputJSON:    `{"email": "loeken@internetz.me", "password": "password}`,
 			statusCode:   200,
 			errorMessage: "",
 		},
 		{
-			inputJSON:    `{"email": "pet@gmail.com", "password": "wrong password"}`,
+			inputJSON:    `{"email": "loeken@internetz.me", "password": "wrong password"}`,
 			statusCode:   422,
 			errorMessage: "Incorrect Password",
 		},
 		{
-			inputJSON:    `{"email": "frank@gmail.com", "password": "password"}`,
+			inputJSON:    `{"email": "foo@bar.com", "password": "password"}`,
 			statusCode:   422,
 			errorMessage: "Incorrect Details",
 		},
@@ -103,16 +103,11 @@ func TestLogin(t *testing.T) {
 			statusCode:   422,
 			errorMessage: "Required Password",
 		},
-		{
-			inputJSON:    `{"email": "", "password": "password"}`,
-			statusCode:   422,
-			errorMessage: "Required Email",
-		},
 	}
 
 	for _, v := range samples {
 
-		req, err := http.NewRequest("POST", "/login", bytes.NewBufferString(v.inputJSON))
+		req, err := http.NewRequest("POST", "/api/v1/auth", bytes.NewBufferString(v.inputJSON))
 		if err != nil {
 			t.Errorf("this is the error: %v", err)
 		}

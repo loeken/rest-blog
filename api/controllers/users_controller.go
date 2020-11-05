@@ -90,10 +90,10 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
-	userGotten.Password = ""
+	userGotten.CleanForPublic()
 	responses.JSON(w, http.StatusOK, userGotten)
 }
-// GetUser godoc
+// UpdateUser godoc
 // @Summary update specific user by id
 // @Description update specific user by id
 // @Accept  json

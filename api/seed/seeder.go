@@ -14,7 +14,7 @@ var users = []models.User{
 		Password: "password",
 	},
 	models.User{
-		Nickname: "Martin Luther",
+		Nickname: "Martin Luther King",
 		Email:    "luther@gmail.com",
 		Password: "password",
 	},

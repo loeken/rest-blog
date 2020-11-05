@@ -14,7 +14,15 @@ import (
 	"github.com/loeken/rest-blog/api/responses"
 	"github.com/loeken/rest-blog/api/utils/formaterror"
 )
-
+// CreatePost godoc
+// @Summary Creates a new post
+// @Description Creates a new post
+// @Accept json
+// @Param body body models.Post true "Json body containing post data"
+// @Success 200 {array} models.Post
+// @Router /post [post]
+// @Security ApiKeyAuth
+// @param Authorization header string true "Format: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'"
 func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -52,7 +60,13 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Lacation", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, postCreated.ID))
 	responses.JSON(w, http.StatusCreated, postCreated)
 }
-
+// GetPosts godoc
+// @Summary lists all posts
+// @Description lists all posts
+// @Accept  json
+// @Success 200 {array} models.Post
+// @Produces string
+// @Router /post [get]
 func (server *Server) GetPosts(w http.ResponseWriter, r *http.Request) {
 
 	post := models.Post{}
