@@ -18,19 +18,15 @@ type User struct {
 	ID        uint32    `gorm:"primary_key;auto_increment" swaggerignore:"true"`
 	Nickname  string    `gorm:"size:255;not null;unique" json:"nickname"`
 	Email     string    `gorm:"size:100;not null;unique" json:"email"`
-	Password  string    `gorm:"size:100;not null" json:"-"`
+	Password  string    `gorm:"->:false;<-:create"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at" swaggerignore:"true"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at" swaggerignore:"true"`
 }
 type UserRegister struct {
+	
 	Nickname  string    `gorm:"size:255;not null;unique" json:"nickname"`
 	Email     string    `gorm:"size:100;not null;unique" json:"email"`
-	Password  string    `gorm:"size:100;not null" json:"password"`
-
 }
-func (u *User) CleanForPublic() {
-	u.Password = ""
-  }
 func Hash(password string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 }
@@ -121,7 +117,15 @@ func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 	}
 	return &users, err
 }
-
+func (u *User) FindAllUsersForPublic(db *gorm.DB) (*[]UserRegister, error) {
+	var err error
+	users := []UserRegister{}
+	err = db.Debug().Model(&User{}).Limit(100).Find(&users).Error
+	if err != nil {
+		return &[]UserRegister{}, err
+	}
+	return &users, err
+}
 func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
 	var err error
 	err = db.Debug().Model(User{}).Where("id = ?", uid).Take(&u).Error

@@ -51,6 +51,9 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, userCreated.ID))
 	responses.JSON(w, http.StatusCreated, userCreated)
 }
+type User struct {
+    Email string
+}
 // GetUsers godoc
 // @Summary lists all users
 // @Description lists all users
@@ -93,7 +96,6 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
-	userGotten.CleanForPublic()
 	responses.JSON(w, http.StatusOK, userGotten)
 }
 // UpdateUser godoc
