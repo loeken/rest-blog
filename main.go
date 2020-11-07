@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/loeken/rest-blog/api"
-	
 )
+
 // @title Rest Blog
 // @version 1.0
 // @description This is a sample service for a blog
@@ -16,9 +18,8 @@ import (
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
-
+// @tokenUrl http://localhost:8080/api/v1/auth
 func main() {
-
+	fmt.Println("application started")
 	api.Run()
-
 }

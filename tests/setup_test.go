@@ -6,7 +6,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"	
+	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"github.com/joho/godotenv"
 	"github.com/loeken/rest-blog/api/controllers"
 	"github.com/loeken/rest-blog/api/models"
@@ -36,7 +38,7 @@ func Database() {
 
 	if TestDbDriver == "mysql" {
 		DBURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", os.Getenv("TEST_DB_USER"), os.Getenv("TEST_DB_PASSWORD"), os.Getenv("TEST_DB_HOST"), os.Getenv("TEST_DB_PORT"), os.Getenv("TEST_DB_NAME"))
-		server.DB, err = gorm.Open(TestDbDriver, DBURL)
+		server.DB, err = gorm.Open(mysql.Open(DBURL), &gorm.Config{})
 		if err != nil {
 			fmt.Printf("Cannot connect to %s database\n", TestDbDriver)
 			log.Fatal("This is the error:", err)
@@ -46,7 +48,7 @@ func Database() {
 	}
 	if TestDbDriver == "postgres" {
 		DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", os.Getenv("TEST_DB_HOST"), os.Getenv("TEST_DB_PORT"), os.Getenv("TEST_DB_USER"), os.Getenv("TEST_DB_NAME"), os.Getenv("TEST_DB_PASSWORD"))
-		server.DB, err = gorm.Open(TestDbDriver, DBURL)
+		server.DB, err = gorm.Open(postgres.Open(DBURL), &gorm.Config{})
 		if err != nil {
 			fmt.Printf("Cannot connect to %s database\n", TestDbDriver)
 			log.Fatal("This is the error:", err)
@@ -57,11 +59,9 @@ func Database() {
 }
 
 func refreshUserTable() error {
-	err := server.DB.DropTableIfExists(&models.User{}).Error
-	if err != nil {
-		return err
-	}
-	err = server.DB.AutoMigrate(&models.User{}).Error
+	
+	server.DB.Migrator().DropTable(&models.User{})
+	err := server.DB.AutoMigrate(&models.User{})
 	if err != nil {
 		return err
 	}
@@ -77,8 +77,8 @@ func seedOneUser() (models.User, error) {
 	}
 
 	user := models.User{
-		Nickname: "Pet",
-		Email:    "pet@gmail.com",
+		Nickname: "loeken",
+		Email:    "loeken@internetz.me",
 		Password: "password",
 	}
 
@@ -119,11 +119,11 @@ func seedUsers() ([]models.User, error) {
 
 func refreshUserAndPostTable() error {
 
-	err := server.DB.DropTableIfExists(&models.User{}, &models.Post{}).Error
+	err := server.DB.Migrator().DropTable(&models.Post{},&models.User{})
 	if err != nil {
 		return err
 	}
-	err = server.DB.AutoMigrate(&models.User{}, &models.Post{}).Error
+	err = server.DB.AutoMigrate(&models.User{}, &models.Post{})
 	if err != nil {
 		return err
 	}
@@ -181,10 +181,12 @@ func seedUsersAndPosts() ([]models.User, []models.Post, error) {
 		models.Post{
 			Title:   "Title 1",
 			Content: "Hello world 1",
+			AuthorID: 1,
 		},
 		models.Post{
 			Title:   "Title 2",
 			Content: "Hello world 2",
+			AuthorID: 1,
 		},
 	}
 

@@ -137,6 +137,7 @@ func TestGetUserByID(t *testing.T) {
 		email        string
 		errorMessage string
 	}{
+		//@todo figure out status code
 		{
 			id:         strconv.Itoa(int(user.ID)),
 			statusCode: 200,
@@ -150,7 +151,7 @@ func TestGetUserByID(t *testing.T) {
 	}
 	for _, v := range userSample {
 
-		req, err := http.NewRequest("GET", "/users", nil)
+		req, err := http.NewRequest("GET", "/api/v1/user", nil)
 		if err != nil {
 			t.Errorf("This is the error: %v\n", err)
 		}

@@ -14,6 +14,7 @@ import (
 	"github.com/loeken/rest-blog/api/responses"
 	"github.com/loeken/rest-blog/api/utils/formaterror"
 )
+
 // CreatePost godoc
 // @Summary Creates a new post
 // @Description Creates a new post
@@ -22,7 +23,6 @@ import (
 // @Success 200 {array} models.Post
 // @Router /post [post]
 // @Security ApiKeyAuth
-// @param Authorization header string true "Format: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'"
 // @tags posts
 func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 
@@ -59,8 +59,10 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Lacation", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, postCreated.ID))
+	postCreated.Author.Password = ""
 	responses.JSON(w, http.StatusCreated, postCreated)
 }
+
 // GetPosts godoc
 // @Summary lists all posts
 // @Description lists all posts
@@ -78,8 +80,14 @@ func (server *Server) GetPosts(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	responses.JSON(w, http.StatusOK, posts)
+	cleanedPosts := []models.Post{}
+	for _, post := range *posts {
+		post.Author.Password = ""
+		cleanedPosts = append(cleanedPosts, post)
+	}
+	responses.JSON(w, http.StatusOK, cleanedPosts)
 }
+
 // GetPost godoc
 // @Summary list post by id
 // @Description list post by id
@@ -104,8 +112,10 @@ func (server *Server) GetPost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+	postReceived.Author.Password = ""
 	responses.JSON(w, http.StatusOK, postReceived)
 }
+
 // UpdatePost godoc
 // @Summary Updates a post
 // @Description Updates a post
@@ -158,8 +168,10 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
+	postUpdated.Author.Password = ""
 	responses.JSON(w, http.StatusOK, postUpdated)
 }
+
 // DeletePost godoc
 // @Summary Deletes a post
 // @Description Deletes a post

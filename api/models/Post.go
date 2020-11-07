@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // Post represents an entry in the posts table
@@ -15,7 +15,7 @@ type Post struct {
 	Title     string    `gorm:"size:255;not null;unique" json:"title"`
 	Content   string    `gorm:"size:255;not null;" json:"content"`
 	Author    User      `json:"author" swaggerignore:"true"`
-	AuthorID  uint32    `gorm:"not null" json:"author_id"`
+	AuthorID  uint32    `gorm:"not null;foreignKey:AuthorRefer" json:"author_id"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at" swaggerignore:"true"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at" swaggerignore:"true"`
 }
@@ -119,9 +119,6 @@ func (p *Post) DeleteAPost(db *gorm.DB, pid uint64, uid uint32) (int64, error) {
 	db = db.Debug().Model(&Post{}).Where("id = ? and author_id = ?", pid, uid).Take(&Post{}).Delete(&Post{})
 
 	if db.Error != nil {
-		if gorm.IsRecordNotFoundError(db.Error) {
-			return 0, errors.New("Post not found")
-		}
 		return 0, db.Error
 	}
 	return db.RowsAffected, nil

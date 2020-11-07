@@ -7,12 +7,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+
 	"github.com/gorilla/mux"
 	"github.com/loeken/rest-blog/api/auth"
 	"github.com/loeken/rest-blog/api/models"
 	"github.com/loeken/rest-blog/api/responses"
 	"github.com/loeken/rest-blog/api/utils/formaterror"
 )
+
 // CreateUser godoc
 // @Summary Creates a new User account
 // @Description Creates a new User account
@@ -51,9 +53,11 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.RequestURI, userCreated.ID))
 	responses.JSON(w, http.StatusCreated, userCreated)
 }
+
 type User struct {
-    Email string
+	Email string
 }
+
 // GetUsers godoc
 // @Summary lists all users
 // @Description lists all users
@@ -72,8 +76,14 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	responses.JSON(w, http.StatusOK, users)
+	cleanedUsers := []models.User{}
+	for _, user := range *users {
+		user.Password = ""
+		cleanedUsers = append(cleanedUsers, user)
+	}
+	responses.JSON(w, http.StatusOK, cleanedUsers)
 }
+
 // GetUser godoc
 // @Summary list specific user by id
 // @Description list specific user by id
@@ -96,8 +106,11 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
+	userGotten.Password = ""
+
 	responses.JSON(w, http.StatusOK, userGotten)
 }
+
 // UpdateUser godoc
 // @Summary update specific user by id
 // @Description update specific user by id
@@ -149,8 +162,10 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
+	updatedUser.Password = ""
 	responses.JSON(w, http.StatusOK, updatedUser)
 }
+
 // DeleteUser godoc
 // @Summary delete specific user by id
 // @Description delete specific user by id

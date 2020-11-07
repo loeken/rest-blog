@@ -1,11 +1,13 @@
 package formaterror
 
 import (
+	"fmt"
 	"errors"
 	"strings"
 )
 
 func FormatError(err string) error {
+	fmt.Println("error:" + err)
 
 	if strings.Contains(err, "nickname") {
 		return errors.New("Nickname Already Taken")
@@ -21,5 +23,5 @@ func FormatError(err string) error {
 	if strings.Contains(err, "hashedPassword") {
 		return errors.New("Incorrect Password")
 	}
-	return errors.New("Incorrect Details")
+	return errors.New(err)
 }

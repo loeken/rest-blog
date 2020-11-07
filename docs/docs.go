@@ -45,7 +45,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.UserRegister"
+                            "$ref": "#/definitions/models.User"
                         }
                     }
                 ],
@@ -104,13 +104,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/models.Post"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "description": "Format: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MDQ1MzExMDIsInVzZXJfaWQiOjF9.O63ZS_Poy29dDdcZqHDN0XeMPbYPX-Vfyl_FPfsMTvQ'",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -433,17 +426,6 @@ var doc = `{
             }
         },
         "models.User": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "nickname": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.UserRegister": {
             "type": "object",
             "properties": {
                 "email": {
